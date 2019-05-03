@@ -30,7 +30,7 @@ fi
 
 # GET NECESSARY PACKAGES
 sudo apt-get update -y
-sudo apt-get install -y vim git build-essential pkg-config git cmake libssl-dev uuid-dev valgrind
+sudo apt-get install -y vim git build-essential pkg-config git cmake libssl-dev uuid-dev valgrind tmux
 
 ###################################################################################################
 # DOWNLOAD AND INSTALL LINUX AGENT
