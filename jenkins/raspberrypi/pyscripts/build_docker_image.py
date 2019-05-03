@@ -67,7 +67,7 @@ def build_image(tags):
     print(print_separator)
 
 
-    api_client = docker.APIClient(base_url="npipe:////./pipe/docker_engine")
+    api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     build_args = {
         "CLIENTLIBRARY_REPO": tags.repo,
         "CLIENTLIBRARY_COMMIT_NAME": tags.commit_name,
@@ -110,7 +110,7 @@ def tag_images(tags):
     print(print_separator)
     print("TAGGING IMAGE")
     print(print_separator)
-    api_client = docker.APIClient(base_url="npipe:////./pipe/docker_engine")
+    api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     print("Adding tags")
     for image_tag in tags.image_tags:
         print("Adding " + image_tag)
@@ -121,7 +121,7 @@ def push_images(tags):
     print(print_separator)
     print("PUSHING IMAGE")
     print(print_separator)
-    api_client = docker.APIClient(base_url="npipe:////./pipe/docker_engine")
+    api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     for image_tag in tags.image_tags:
         print("Pushing {}:{}".format(tags.docker_full_image_name, image_tag))
         for line in api_client.push(
@@ -136,7 +136,7 @@ def extract_artifacts(tags):
     # Publish directory should be in the top level folder of the sdk.
     source_artifacts = os.path.normpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../source_artifacts.tar"))
     
-    api_client = docker.APIClient(base_url="npipe:////./pipe/docker_engine")
+    api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     for image in api_client.images():
         print("Image:")
         print(image)
@@ -157,7 +157,7 @@ def prefetch_cached_images(tags):
         print(Fore.YELLOW + "PREFETCHING IMAGE")
         print(print_separator)
         tags.image_tag_to_use_for_cache = None
-        api_client = docker.APIClient(base_url="npipe:////./pipe/docker_engine")
+        api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
         for image_tag in tags.image_tags:
             print(
                 Fore.YELLOW
@@ -184,8 +184,8 @@ def prefetch_cached_images(tags):
 
 
 tags = docker_tags.get_docker_tags_from_commit(args.repo, args.commit)
-#prefetch_cached_images(tags)
-#build_image(tags)
-#tag_images(tags)
-#push_images(tags)
-#extract_artifacts(tags)
+prefetch_cached_images(tags)
+build_image(tags)
+tag_images(tags)
+push_images(tags)
+extract_artifacts(tags)

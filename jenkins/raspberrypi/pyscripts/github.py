@@ -9,8 +9,6 @@ def get_sha_from_commit(repo, commit):
     """
     if not commit.startswith("refs/"):
       commit = "refs/heads/" + commit
-    print(repo)
-    print(commit)
     response = requests.get(
         "https://api.github.com/repos/{}/git/{}".format(repo, commit)
     )
